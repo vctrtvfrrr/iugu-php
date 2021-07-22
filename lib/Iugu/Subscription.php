@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class Iugu_Subscription extends APIResource
 {
     public static function create($attributes = [])
@@ -39,15 +41,14 @@ class Iugu_Subscription extends APIResource
         }
 
         try {
-            $response = self::API()->request(
-        'PUT',
-        static::url($this).'/add_credits',
-        ['quantity' => $quantity]
-      );
+            $response = self::API()->request('PUT', static::url($this).'/add_credits', ['quantity' => $quantity]);
+
             if (isset($response->errors)) {
                 return false;
             }
+
             $new_object = self::createFromResponse($response);
+
             $this->copy($new_object);
             $this->resetStates();
 
@@ -66,15 +67,14 @@ class Iugu_Subscription extends APIResource
         }
 
         try {
-            $response = self::API()->request(
-        'PUT',
-        static::url($this).'/remove_credits',
-        ['quantity' => $quantity]
-      );
+            $response = self::API()->request('PUT', static::url($this).'/remove_credits', ['quantity' => $quantity]);
+
             if (isset($response->errors)) {
                 return false;
             }
+
             $new_object = self::createFromResponse($response);
+
             $this->copy($new_object);
             $this->resetStates();
 
@@ -93,22 +93,21 @@ class Iugu_Subscription extends APIResource
         }
 
         try {
-            $response = self::API()->request(
-        'POST',
-        static::url($this).'/suspend'
-      );
+            $response = self::API()->request('POST', static::url($this).'/suspend');
 
             if (isset($response->errors)) {
                 return false;
             }
+
             $new_object = self::createFromResponse($response);
 
             $new_flag = $new_object->suspended;
             $old_flag = $this->suspended;
+
             $this->copy($new_object);
             $this->resetStates();
 
-            return $old_flag != $new_flag;
+            return $old_flag !== $new_flag;
         } catch (Exception $e) {
             return false;
         }
@@ -123,21 +122,21 @@ class Iugu_Subscription extends APIResource
         }
 
         try {
-            $response = self::API()->request(
-        'POST',
-        static::url($this).'/activate'
-      );
+            $response = self::API()->request('POST', static::url($this).'/activate');
+
             if (isset($response->errors)) {
                 return false;
             }
+
             $new_object = self::createFromResponse($response);
 
             $new_flag = $new_object->active;
             $old_flag = $this->active;
+
             $this->copy($new_object);
             $this->resetStates();
 
-            return $old_flag != $new_flag;
+            return $old_flag !== $new_flag;
         } catch (Exception $e) {
             return false;
         }
@@ -150,15 +149,13 @@ class Iugu_Subscription extends APIResource
         if ($this->is_new()) {
             return false;
         }
-        if ($identifier == null) {
+        if ($identifier === null) {
             return false;
         }
 
         try {
-            $response = self::API()->request(
-        'POST',
-        static::url($this).'/change_plan/'.$identifier
-      );
+            $response = self::API()->request('POST', static::url($this).'/change_plan/'.$identifier);
+
             if (isset($response->errors)) {
                 return false;
             }
@@ -171,10 +168,11 @@ class Iugu_Subscription extends APIResource
 
     public function customer()
     {
-        if (!isset($this->customer_id)) {
+        if (! isset($this->customer_id)) {
             return false;
         }
-        if (!$this->customer_id) {
+
+        if (! $this->customer_id) {
             return false;
         }
 

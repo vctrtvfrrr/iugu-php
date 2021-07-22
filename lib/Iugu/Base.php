@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class IuguAuthenticationException extends Exception
 {
 }
@@ -19,7 +21,7 @@ abstract class IuguResource
 
 abstract class Iugu
 {
-    const VERSION = '1.0.6';
+    public const VERSION = '1.1.0';
 
     public static $api_key = null;
     public static $api_version = 'v1';
@@ -30,7 +32,7 @@ abstract class Iugu
         return self::$endpoint.'/'.self::$api_version;
     }
 
-    public static function setApiKey($_api_key)
+    public static function setApiKey($_api_key): void
     {
         self::$api_key = $_api_key;
     }

@@ -4,7 +4,7 @@
 
 ## Requisitos
 
-* PHP 5.4+
+* PHP 7.3+
 
 ## Instalação
 
@@ -66,4 +66,3 @@ Execute a comitiva de testes:
 ```
 composer tests
 ```
-

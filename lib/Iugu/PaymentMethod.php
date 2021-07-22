@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 class Iugu_PaymentMethod extends APIResource
 {
     public static function url($object = null)
     {
-        if (!isset($object['customer_id'])) {
+        if (! isset($object['customer_id'])) {
             throw new IuguException('Missing Customer ID');
         }
 
-        $customer_id = $object['customer_id'];
         $object_id = null;
-
         if (isset($object['id'])) {
             $object_id = $object['id'];
         }
@@ -47,6 +47,4 @@ class Iugu_PaymentMethod extends APIResource
     {
         return self::searchAPI($options);
     }
-
-  // TODO: (FUTURE) Allow charge from here
 }

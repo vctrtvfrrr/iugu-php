@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 class Iugu_Utilities
 {
-    public static function authFromEnv()
+    public static function authFromEnv(): void
     {
         $apiKey = getenv('IUGU_API_KEY');
         if ($apiKey) {
@@ -12,7 +14,7 @@ class Iugu_Utilities
 
     public static function utf8($value)
     {
-        return (is_string($value) && mb_detect_encoding($value, 'UTF-8', true) != 'UTF-8') ? utf8_encode($value) : $value;
+        return (is_string($value) && mb_detect_encoding($value, 'UTF-8', true) !== 'UTF-8') ? utf8_encode($value) : $value;
     }
 
     public static function convertDateFromISO($datetime)
@@ -27,18 +29,18 @@ class Iugu_Utilities
 
     public static function arrayToParams($array, $prefix = null)
     {
-        if (!is_array($array)) {
+        if (! is_array($array)) {
             return $array;
         }
 
         $params = [];
 
         foreach ($array as $k => $v) {
-            if (is_null($v)) {
+            if ($v === null) {
                 continue;
             }
 
-            if ($prefix && $k && !is_int($k)) {
+            if ($prefix && $k && ! is_int($k)) {
                 $k = $prefix.'['.$k.']';
             } elseif ($prefix) {
                 $k = $prefix.'[]';
@@ -47,7 +49,7 @@ class Iugu_Utilities
             if (is_array($v)) {
                 $params[] = self::arrayToParams($v, $k);
             } else {
-                $params[] = $k.'='.urlencode($v);
+                $params[] = $k.'='.urlencode((string) $v);
             }
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class APIChildResource
 {
     private $_parentKeys;
@@ -14,15 +16,6 @@ class APIChildResource
     public function mergeParams($attributes)
     {
         return array_merge($attributes, $this->_parentKeys);
-    }
-
-    private function configureParentKeys($object)
-    {
-        foreach ($this->_parentKeys as $key => $value) {
-            $object[$key] = $value;
-        }
-
-        return $object;
     }
 
     public function create($attributes = [])
@@ -51,11 +44,9 @@ class APIChildResource
 
     public function fetch($key = [])
     {
-        if (is_string($key)) {
-            $key = ['id' => $key];
+        if (! is_array($key)) {
+            $key = ['id' => (string) $key];
         }
-
-        print_r([$this->mergeParams($key), $this->_parentKeys]);
 
         $result = call_user_func_array($this->_fabricator.'::fetch', [$this->mergeParams($key), $this->_parentKeys]);
         if ($result) {
@@ -63,5 +54,14 @@ class APIChildResource
         }
 
         return $result;
+    }
+
+    private function configureParentKeys($object)
+    {
+        foreach ($this->_parentKeys as $key => $value) {
+            $object[$key] = $value;
+        }
+
+        return $object;
     }
 }

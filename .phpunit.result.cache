@@ -1,0 +1,1 @@
+{"version":1,"defects":[],"times":{"Iugu_CustomerTest::should_create_a_customer":0.015,"Iugu_CustomerTest::should_create_a_customer_with_cpf":0.002,"Iugu_CustomerTest::should_create_a_customer_with_cnpj":0.002,"Iugu_CustomerTest::should_create_a_customer_with_full_address":0.002,"Iugu_CustomerTest::should_raise_error_when_email_is_empty":0.001}}

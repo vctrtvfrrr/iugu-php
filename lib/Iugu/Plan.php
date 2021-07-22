@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class Iugu_Plan extends APIResource
 {
     public static function create($attributes = [])
@@ -32,21 +34,22 @@ class Iugu_Plan extends APIResource
         return self::searchAPI($options);
     }
 
-    public static function fetchByIdentifier($identifier) {
+    public static function fetchByIdentifier($identifier)
+    {
         try {
-            $response = self::API()->request(
-                "GET",
-                static::url() . "/identifier/" . $identifier
-            );
+            $response = self::API()->request('GET', static::url().'/identifier/'.$identifier);
+
             if (isset($response->errors)) {
                 return false;
             }
-            $new_object = self::createFromResponse( $response );
-            return $new_object;
 
+            $new_object = self::createFromResponse($response);
+
+            return $new_object;
         } catch (Exception $e) {
             return false;
         }
+
         return false;
     }
 }

@@ -1,9 +1,11 @@
 <?php
 
-//ooooooooooooooooooooooooooooooooooooooooooooo
-// Iugu_Object manages the Object State
-// Values that changed, values that need to be saved
-//ooooooooooooooooooooooooooooooooooooooooooooo
+declare(strict_types=1);
+
+/**
+ * Iugu_Object manages the Object State
+ * Values that changed, values that need to be saved.
+ */
 class Iugu_Object implements ArrayAccess
 {
     protected $_attributes;
@@ -19,7 +21,7 @@ class Iugu_Object implements ArrayAccess
         }
     }
 
-    public function __set($key, $value)
+    public function __set($key, $value): void
     {
         $this->offsetSet($key, $value);
     }
@@ -29,7 +31,7 @@ class Iugu_Object implements ArrayAccess
         return $this->offsetExists($key);
     }
 
-    public function __unset($key)
+    public function __unset($key): void
     {
         $this->offsetUnset($key);
     }
@@ -39,7 +41,16 @@ class Iugu_Object implements ArrayAccess
         return $this->offsetGet($key);
     }
 
-    public function offsetSet($key, $value)
+    public function __toString()
+    {
+        if (isset($this->_attributes['id'])) {
+            return $this->_attributes['id'];
+        }
+
+        return static::class;
+    }
+
+    public function offsetSet($key, $value): void
     {
         $this->_attributes[$key] = $value;
         $this->_unsavedAttributes[$key] = 1;
@@ -50,10 +61,9 @@ class Iugu_Object implements ArrayAccess
         return array_key_exists($k, $this->_attributes);
     }
 
-    public function offsetUnset($key)
+    public function offsetUnset($key): void
     {
-        unset($this->_attributes[$key]);
-        unset($this->_unsavedAttributes[$key]);
+        unset($this->_attributes[$key], $this->_unsavedAttributes[$key]);
     }
 
     public function offsetGet($key)
@@ -71,29 +81,20 @@ class Iugu_Object implements ArrayAccess
         return array_intersect_key($this->_attributes, $this->_unsavedAttributes);
     }
 
-    public function resetStates()
+    public function resetStates(): void
     {
         $this->_unsavedAttributes = [];
     }
 
     public function is_new()
     {
-        return !isset($this->_attributes['id']);
+        return ! isset($this->_attributes['id']);
     }
 
-    public function copy($object)
+    public function copy($object): void
     {
         foreach ($object->keys() as $key) {
             $this->_attributes[$key] = $object[$key];
         }
-    }
-
-    public function __toString()
-    {
-        if (isset($this->_attributes['id'])) {
-            return $this->_attributes['id'];
-        }
-
-        return get_called_class();
     }
 }

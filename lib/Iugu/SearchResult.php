@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class Iugu_SearchResult
 {
     protected $_totalResults;
@@ -21,7 +23,7 @@ class Iugu_SearchResult
         return $this->_results;
     }
 
-    public function set($results, $totalResults)
+    public function set($results, $totalResults): void
     {
         $this->_totalResults = $totalResults;
         $this->_results = $results;

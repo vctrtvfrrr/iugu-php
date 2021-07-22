@@ -1,7 +1,9 @@
 <?php
 
-if (!function_exists('get_called_class')) {
-    class class_tools
+declare(strict_types=1);
+
+if (! function_exists('get_called_class')) {
+    class Backward_Compatibility
     {
         public static $i = 0;
         public static $fl = null;
@@ -10,7 +12,7 @@ if (!function_exists('get_called_class')) {
         {
             $bt = debug_backtrace();
 
-            if (self::$fl == $bt[2]['file'].$bt[2]['line']) {
+            if (self::$fl === $bt[2]['file'].$bt[2]['line']) {
                 self::$i++;
             } else {
                 self::$i = 0;
@@ -29,6 +31,6 @@ if (!function_exists('get_called_class')) {
 
     function get_called_class()
     {
-        return class_tools::get_called_class();
+        return Backward_Compatibility::get_called_class();
     }
 }

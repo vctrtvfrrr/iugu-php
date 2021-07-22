@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 class APIResource extends Iugu_Object
 {
-
     private static $_apiRequester = null;
 
     public static function convertClassToObjectType()
     {
-        $object_type = str_replace('Iugu_', '', get_called_class());
-        $object_type = strtolower(preg_replace('/(?<=\\w)([A-Z])/', '_\\1', $object_type));
+        $object_type = str_replace('Iugu_', '', static::class);
+        $object_type = mb_strtolower(preg_replace('/(?<=\\w)([A-Z])/', '_\\1', $object_type));
 
         return mb_strtolower($object_type, 'UTF-8');
     }
@@ -16,24 +17,29 @@ class APIResource extends Iugu_Object
     public static function objectBaseURI()
     {
         $object_type = self::convertClassToObjectType();
+
         switch ($object_type) {
             // Add Exceptions as needed
         case 'charge':
             return $object_type;
+
         case 'payment_token':
             return $object_type;
+
         case 'bank_verification':
             return $object_type;
+
         case 'marketplace':
             return $object_type; // WORKAROUND MARKETPLACE
+
         default:
-            return $object_type . 's';
+            return $object_type.'s';
         }
     }
 
     public static function API()
     {
-        if (self::$_apiRequester == null) {
+        if (self::$_apiRequester === null) {
             self::$_apiRequester = new Iugu_APIRequest();
         }
 
@@ -45,20 +51,22 @@ class APIResource extends Iugu_Object
         $path = '';
 
         if (is_string($object)) {
-            $path = '/' . $object;
+            $path = '/'.$object;
         } elseif (is_object($object) && (isset($object['id']))) {
-            $path = '/' . $object['id'];
+            $path = '/'.$object['id'];
         } elseif (is_object($object) && (isset($object['account_id']))) { // WORKAROUND MARKETPLACE/ACCOUNT
-            $path = '/' . $object['account_id'];
+            $path = '/'.$object['account_id'];
         }
         if (isset($object['action'])) { // WORKAROUND MARKETPLACE/ACCOUNT
-            if (isset($object['id']))
-                $path .= '/' . $object['id'];
-            elseif (isset($object['account_id']))
-                $path .= '/' . $object['account_id'];
-            $path .= '/' . $object['action'];
+            if (isset($object['id'])) {
+                $path .= '/'.$object['id'];
+            } elseif (isset($object['account_id'])) {
+                $path .= '/'.$object['account_id'];
+            }
+            $path .= '/'.$object['action'];
         }
-        return Iugu::getBaseURI() . $uri_path . '/' . self::objectBaseURI() . $path;
+
+        return Iugu::getBaseURI().$uri_path.'/'.self::objectBaseURI().$path;
     }
 
     public static function url($object = null)
@@ -89,7 +97,7 @@ class APIResource extends Iugu_Object
 
     protected function deleteAPI()
     {
-        if ($this['id'] == null) {
+        if ($this['id'] === null) {
             return false;
         }
 
@@ -117,7 +125,6 @@ class APIResource extends Iugu_Object
 
             return self::createFromResponse($response);
         } catch (Exception $e) {
-
         }
 
         return [];
@@ -132,7 +139,7 @@ class APIResource extends Iugu_Object
 
             return self::createFromResponse($response);
         } catch (IuguObjectNotFound $e) {
-            throw new IuguObjectNotFound(self::convertClassToObjectType(get_called_class()) . ':' . ' not found');
+            throw new IuguObjectNotFound(self::convertClassToObjectType(static::class).':'.' not found');
         }
     }
 
@@ -181,5 +188,4 @@ class APIResource extends Iugu_Object
 
         return true;
     }
-
 }

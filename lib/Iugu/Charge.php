@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 class Iugu_Charge extends APIResource
 {
     public static function create($attributes = [])
     {
         $result = self::createAPI($attributes);
-        if (!isset($result->success) && !isset($result->errors)) {
+        if (! isset($result->success) && ! isset($result->errors)) {
             $result->success = false;
         }
 
@@ -14,10 +16,10 @@ class Iugu_Charge extends APIResource
 
     public function invoice()
     {
-        if (!isset($this->invoice_id)) {
+        if (! isset($this->invoice_id)) {
             return false;
         }
-        if (!$this->invoice_id) {
+        if (! $this->invoice_id) {
             return false;
         }
 
